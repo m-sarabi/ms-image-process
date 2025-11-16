@@ -32,7 +32,7 @@ classifiers = [
     "Topic :: Utilities",
 ]
 license = "MIT"
-license-file = "LICENSE"
+license-files = ["LICEN[CS]E*"]
 
 [project.urls]
 Homepage = "https://github.com/m-sarabi/ms-image-process"
