@@ -2,6 +2,37 @@ from PIL import Image, ImageEnhance
 import os
 
 
+def auto_orient_image(image: Image.Image) -> Image.Image:
+    """
+    Reads the EXIF orientation tag and applies the appropriate rotation.
+    :param image: the image to rotate
+    :return: the rotated image
+    """
+    try:
+        exif = image.getexif()
+        if exif is None:
+            return image
+
+        orientation = exif.get(0x0112)
+        if orientation == 2:
+            image = image.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
+        elif orientation == 3:
+            image = image.transpose(Image.Transpose.ROTATE_180)
+        elif orientation == 4:
+            image = image.transpose(Image.Transpose.FLIP_TOP_BOTTOM)
+        elif orientation == 5:
+            image = image.transpose(Image.Transpose.TRANSPOSE)
+        elif orientation == 6:
+            image = image.transpose(Image.Transpose.ROTATE_270)
+        elif orientation == 7:
+            image = image.transpose(Image.Transpose.TRANSVERSE)
+        elif orientation == 8:
+            image = image.transpose(Image.Transpose.ROTATE_90)
+        return image
+    except (AttributeError, KeyError, IndexError):
+        return image
+
+
 def process_image(
         input_path: str,
         output_path: str,
@@ -26,6 +57,8 @@ def process_image(
     try:
         with Image.open(input_path) as img:
             print(f'Processing image {input_path}')
+
+            img = auto_orient_image(img)
 
             # handle brightness
             if brightness != 1.0:
