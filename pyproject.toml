@@ -39,3 +39,6 @@ Homepage = "https://github.com/m-sarabi/ms-image-process"
 Documentation = "https://github.com/m-sarabi/ms-image-process/blob/main/README.md"
 Repository = "https://github.com/m-sarabi/ms-image-process"
 Issues = "https://github.com/m-sarabi/ms-image-process/issues"
+
+[project.scripts]
+ms-image = "ms_image_process.cli:main"
