@@ -1,3 +1,5 @@
+from email.policy import default
+
 from PIL import Image, ImageEnhance
 import os
 
@@ -42,6 +44,7 @@ def process_image(
         grayscale: bool = False,
         brightness: float = 1.0,
         contrast: float = 1.0,
+        rotate: str = None,
 ):
     """
     Processes an image with resizing, grayscale, and compression.
@@ -53,6 +56,7 @@ def process_image(
     :param grayscale: grayscale image
     :param brightness: brightness factor
     :param contrast: contrast factor
+    :param rotate: rotation angle
     """
     try:
         with Image.open(input_path) as img:
@@ -76,6 +80,12 @@ def process_image(
             if grayscale:
                 img = img.convert('L')
                 print('converted to grayscale.')
+
+            # handle rotation
+            if rotate:
+                angle = int(rotate)
+                img = img.rotate(angle, expand=True)
+                print(f'rotated by {angle} degrees.')
 
             # handle resizing
             original_width, original_height = img.size
@@ -126,6 +136,12 @@ import click
 @click.option('--grayscale', '-g', is_flag=True, help='Convert the image to grayscale.')
 @click.option('--brightness', '-b', type=float, default=1.0, help='Adjust the brightness.')
 @click.option('--contrast', '-c', type=float, default=1.0, help='Adjust the contrast.')
+@click.option(
+    '--rotate', '-r',
+    type=click.Choice(['90', '180', '270']),
+    default=None,
+    help='Rotate the image clockwise by 90, 180, or 270 degrees.'
+)
 def main(
         input_path: str,
         output_path: str,
@@ -135,6 +151,7 @@ def main(
         grayscale: bool,
         brightness: float,
         contrast: float,
+        rotate: str,
 ):
     """
     A simple CLI tool for processing images.
@@ -155,6 +172,7 @@ def main(
         grayscale,
         brightness,
         contrast,
+        rotate,
     )
 
 
