@@ -1,4 +1,4 @@
-from PIL import Image
+from PIL import Image, ImageEnhance
 import os
 
 
@@ -9,6 +9,8 @@ def process_image(
         height: int,
         scale: float,
         grayscale: bool = False,
+        brightness: float = 1.0,
+        contrast: float = 1.0,
 ):
     """
     Processes an image with resizing, grayscale, and compression.
@@ -18,10 +20,24 @@ def process_image(
     :param height: image height
     :param scale: scaling factor
     :param grayscale: grayscale image
+    :param brightness: brightness factor
+    :param contrast: contrast factor
     """
     try:
         with Image.open(input_path) as img:
             print(f'Processing image {input_path}')
+
+            # handle brightness
+            if brightness != 1.0:
+                enhancer = ImageEnhance.Brightness(img)
+                img = enhancer.enhance(brightness)
+                print(f'adjusted brightness to {brightness}.')
+
+            # handle contrast
+            if contrast != 1.0:
+                enhancer = ImageEnhance.Contrast(img)
+                img = enhancer.enhance(contrast)
+                print(f'adjusted contrast to {contrast}.')
 
             # handle converting to grayscale
             if grayscale:
@@ -75,6 +91,8 @@ import click
 @click.option('--height', '-h', type=int, help='The target height in pixels.')
 @click.option('--scale', '-s', type=float, help='The scaling factor (e.g. 0.5 for 50%).')
 @click.option('--grayscale', '-g', is_flag=True, help='Convert the image to grayscale.')
+@click.option('--brightness', '-b', type=float, default=1.0, help='Adjust the brightness.')
+@click.option('--contrast', '-c', type=float, default=1.0, help='Adjust the contrast.')
 def main(
         input_path: str,
         output_path: str,
@@ -82,6 +100,8 @@ def main(
         height: int,
         scale: float,
         grayscale: bool,
+        brightness: float,
+        contrast: float,
 ):
     """
     A simple CLI tool for processing images.
@@ -99,7 +119,9 @@ def main(
         width,
         height,
         scale,
-        grayscale
+        grayscale,
+        brightness,
+        contrast,
     )
 
 
