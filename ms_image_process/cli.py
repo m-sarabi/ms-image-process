@@ -44,6 +44,7 @@ def process_image(
         grayscale: bool = False,
         brightness: float = 1.0,
         contrast: float = 1.0,
+        sharpness: float = 1.0,
         rotate: str = None,
 ):
     """
@@ -56,6 +57,7 @@ def process_image(
     :param grayscale: grayscale image
     :param brightness: brightness factor
     :param contrast: contrast factor
+    :param sharpness: sharpness factor
     :param rotate: rotation angle
     """
     try:
@@ -105,6 +107,12 @@ def process_image(
                 img = img.resize((new_width, new_height), Image.Resampling.LANCZOS)
                 print(f'resized to {new_width}x{new_height}.')
 
+            # handle sharpness
+            if sharpness != 1.0:
+                enhancer = ImageEnhance.Sharpness(img)
+                img = enhancer.enhance(sharpness)
+                print(f'adjusted sharpness to {sharpness}.')
+
             # handle saving
             # get the file extension
             extension = os.path.splitext(input_path)[1].lower()
@@ -135,6 +143,7 @@ import click
 @click.option('--scale', '-s', type=float, help='The scaling factor (e.g. 0.5 for 50%).')
 @click.option('--grayscale', '-g', is_flag=True, help='Convert the image to grayscale.')
 @click.option('--brightness', '-b', type=float, default=1.0, help='Adjust the brightness.')
+@click.option('--sharpness', '-sh', type=float, default=1.0, help='Adjust the sharpness.')
 @click.option('--contrast', '-c', type=float, default=1.0, help='Adjust the contrast.')
 @click.option(
     '--rotate', '-r',
@@ -151,6 +160,7 @@ def main(
         grayscale: bool,
         brightness: float,
         contrast: float,
+        sharpness: float,
         rotate: str,
 ):
     """
@@ -172,6 +182,7 @@ def main(
         grayscale,
         brightness,
         contrast,
+        sharpness,
         rotate,
     )
 

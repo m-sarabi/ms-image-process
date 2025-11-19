@@ -7,7 +7,7 @@ A simple and command-line tool for resizing, scaling, and grayscale conversion o
 - Resize images to specific dimensions
 - Scale images by a factor
 - Convert images to grayscale
-- Adjust image brightness and contrast
+- Adjust image brightness, contrast, and sharpness
 - Rotate images by 90°, 180°, or 270°
 - Auto-orient images based on EXIF data
 - Simple command-line interface
@@ -34,6 +34,7 @@ ms-image input.jpg output.png [OPTIONS]
 - `--grayscale`, `-g`         Convert the image to grayscale
 - `--brightness FACTOR`, `-b` Adjust image brightness (default: 1.0)
 - `--contrast FACTOR`, `-c`   Adjust image contrast (default: 1.0)
+- `--sharpness FACTOR`, `-sh` Adjust image sharpness (default: 1.0)
 - `--rotate DEGREES`, `-r`    Rotate image (90, 180, or 270 degrees clockwise)
 
 ### Examples
@@ -56,6 +57,11 @@ ms-image input.jpg output.jpg --grayscale --scale 0.5
 Resize an image to 1200px width, adjust brightness and contrast, and rotate it 180 degrees:
 ```bash
 ms-image input.jpg output.jpg --width 1200 --brightness 1.1 --contrast 1.2 --rotate 180
+```
+
+Enhance the sharpness of an image while converting to grayscale:
+```bash
+ms-image input.jpg output.jpg --grayscale --sharpness 1.8
 ```
 
 ## Dependencies
